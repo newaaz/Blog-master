@@ -1,6 +1,10 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :rememberable
 
+  # has_many :posts
+  belongs_to :region, optional: true
+
+  validates :region, presence: true, unless: :admin?
   validates :login, presence: true, uniqueness: true
   validates :fio, presence: true
 

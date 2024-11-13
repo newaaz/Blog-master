@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DeviseCreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
@@ -10,9 +8,10 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       ## Rememberable
       t.datetime :remember_created_at
 
-      t.string :fio, null: false, default: ""
-
+      t.string :fio,    null: false
       t.boolean :admin, null: false, default: false
+
+      t.references :region, null: false, foreign_key: true
 
       t.timestamps null: false
     end

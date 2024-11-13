@@ -14,6 +14,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :region_id %>
+    <%= f.collection_select :region_id, Region.order(:name), :id, :name, { prompt: "Выбрать..." }, class:"form-select" %>
+  </div>
+
+  <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
     <em>(<%= @minimum_password_length %> characters minimum)</em>
