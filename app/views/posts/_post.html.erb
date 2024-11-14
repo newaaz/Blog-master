@@ -1,0 +1,18 @@
+<%= content_tag(:div, id: dom_id(post), class: "p-2 mb-2 border") do %>
+  <%= link_to "Vacation request № #{post.id}", post %>
+
+  <%= post.title %>
+
+  <div class="vacation_status d-inline text-secondary fw-bold">
+    Status: <span class="badge bg-secondary"><%= post.state %></span>
+  </div>
+
+  <% if post.state == 'draft' %>
+    <div class="vacation_actions d-inline ms-3">
+      <%= link_to 'To moderation', post_path(post, state_action: 'submit_to_review'), data: { 'turbo-method': :patch }, class: 'btn btn-sm btn-success' %>
+      <%#= link_to 'Reject', vacation_path(vacation, status_action: 'reject'), data: { 'turbo-method': :patch }, class: 'btn btn-sm btn-outline-danger' %>
+    </div>
+  <% else %>
+    <%= "state: #{post.state}" %>
+  <% end %>
+<% end %>
