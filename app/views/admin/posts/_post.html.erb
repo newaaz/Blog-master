@@ -1,0 +1,32 @@
+<%= content_tag(:div, id: dom_id(post), class: "d-flex p-2 mb-2 border rounded") do %>
+
+  <div class="p-2 flex-grow-1">
+    <span>ID: <%= post.id %> | </span>
+    <%= link_to post.title, post %>
+  </div>
+
+  <div class="p-2">
+    Автор: <%= post.user.login %>
+    Регион: <%= post.region.name %>
+  </div>
+
+  <div class="post_actions">
+    <%= link_to post_path(post, state_action: 'approve'),
+                data: { 'turbo-method': :patch },
+                class: 'btn btn-sm btn-success' do %>
+
+      <i class="bi bi-plus-circle fa-fw"></i> Принять
+    <% end %>
+
+    <%= link_to post_path(post, state_action: 'reject'),
+                data: { 'turbo-method': :patch },
+                class: 'btn btn-sm btn-outline-danger' do %>
+
+      <i class="bi bi-dash-circle fa-fw"></i> Отклонить
+    <% end %>
+  </div>
+<% end %>
+
+
+
+

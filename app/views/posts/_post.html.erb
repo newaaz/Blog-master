@@ -10,15 +10,18 @@
 
   <% if post.state == 'draft' %>
     <div class="post_actions d-inline ms-3">
-      <%= link_to 'На модерацию', post_path(post, state_action: 'submit_to_review'), data: { 'turbo-method': :patch }, class: 'btn btn-sm btn-success' %>
+      <%= link_to post_path(post, state_action: 'submit_to_review'),
+                                  data: { 'turbo-method': :patch },
+                                  class: 'btn btn-sm btn-success' do %>
 
-      <%= link_to 'Удалить', post_path(post), data: { 'turbo-method': :delete }, class: 'btn btn-sm btn-outline-danger' %>
-
-      <%= link_to post_path(post), class: 'dropdown-item text-danger bg-danger-soft-hover', data: { "turbo-method": :delete, turbo_confirm: "Точно удалить - Вы уверены?" } do %>
-        <i class="bi bi-trash fa-fw me-2"></i>Удалить
+        <i class="bi bi-arrow-up-right-circle fa-fw me-1"></i>На модерацию
       <% end %>
 
-      <%#= link_to 'Reject', vacation_path(vacation, status_action: 'reject'), data: { 'turbo-method': :patch }, class: 'btn btn-sm btn-outline-danger' %>
+      <%= link_to post_path(post), data: { 'turbo-method': :delete }, class: 'btn btn-sm btn-outline-danger' do %>
+        <i class="bi bi-trash fa-fw me-1"></i> Удалить
+      <% end %>
+
+
     </div>
   <% end %>
 <% end %>

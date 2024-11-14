@@ -19,15 +19,9 @@ class PostPolicy < ApplicationPolicy
     !!user && record.draft?
   end
 
-  def accept?
-    can_changed_from_review?
-  end
-
-  alias_method :reject?, :accept?
-
-  private
-
-  def can_changed_from_review?
+  def approve?
     user&.admin? && record.under_review?
   end
+
+  alias_method :reject?, :approve?
 end
