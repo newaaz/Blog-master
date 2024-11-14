@@ -1,8 +1,8 @@
 class PostsController < ApplicationController
-  # before_action :authorize_post!, except: %i[show update]
   before_action :set_post, only: %i[show update destroy]
+  before_action :authorize_post!, except: %i[show update]
 
-  # after_action  :verify_authorized, except: %i[show update]
+  after_action  :verify_authorized, except: %i[show update]
 
   def index
     @posts = Post.all
@@ -41,13 +41,13 @@ class PostsController < ApplicationController
     end
   end
 
-  def edit
-    @post = Post.find(params[:id])
-  end
-
   def update
-    if state_action_exist?(params[:state_action])
-      @post.change_state(params[:state_action])
+    state_action = params[:state_action]
+
+    if state_action && state_action_exist?(state_action)
+      authorize(@post, "#{state_action}?")
+
+      @post.change_state(state_action)
 
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
@@ -83,12 +83,7 @@ class PostsController < ApplicationController
   end
 
   def state_action_exist?(state_action)
-    # Post::STATE_ACTIONS.key?(state_action)
     Post::STATE_ACTIONS.include?(state_action)
-  end
-
-  def authorized_action(state_action)
-    state_action.to_sym
   end
 
   def pundit_user

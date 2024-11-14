@@ -7,7 +7,7 @@ class Post < ApplicationRecord
   has_many_attached :files
 
   validates :title, :body, presence: true
-  # validate :user_can_post_to_region
+  validate :user_can_post_to_region
 
   private
 

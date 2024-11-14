@@ -3,12 +3,12 @@ class UsersController < ApplicationController
     @user = User.includes(posts: { files_attachments: :blob })
                 .find(params[:id])
 
-    # authorize @employee
+    authorize @user
   end
 
   private
 
-  # def pundit_user
-  #   current_user
-  # end
+  def pundit_user
+    current_user
+  end
 end

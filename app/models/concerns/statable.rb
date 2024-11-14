@@ -2,8 +2,6 @@ module Statable
   extend ActiveSupport::Concern
 
   included do
-    # STATE_ACTIONS = { approve: :approve_post, reject: :reject_post }
-
     STATE_ACTIONS = %w[submit_to_review approve reject]
 
     include AASM
