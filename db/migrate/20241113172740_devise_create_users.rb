@@ -11,7 +11,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       t.string :fio,    null: false
       t.boolean :admin, null: false, default: false
 
-      t.references :region, null: false, foreign_key: true
+      t.references :region, null: true, foreign_key: true
 
       t.timestamps null: false
     end

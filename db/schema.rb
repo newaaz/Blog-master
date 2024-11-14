@@ -76,7 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_13_205313) do
     t.datetime "remember_created_at"
     t.string "fio", null: false
     t.boolean "admin", default: false, null: false
-    t.bigint "region_id", null: false
+    t.bigint "region_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["login"], name: "index_users_on_login", unique: true

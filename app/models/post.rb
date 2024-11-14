@@ -4,6 +4,9 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :region
 
+  before_validation :set_default_region, if: -> { region_id.nil? }
+  before_create :set_approved_state, if: -> { user.admin? }
+
   has_many_attached :files
 
   scope :under_review, -> { where(state: 'under_review') }
@@ -38,5 +41,13 @@ class Post < ApplicationRecord
     return if user.region_id == region_id || user.admin?
 
     errors.add(:region, "У поста должен быть Ваш регион")
+  end
+
+  def set_default_region
+    self.region = Region.first if user.admin?
+  end
+
+  def set_approved_state
+    self.state = :approved
   end
 end
