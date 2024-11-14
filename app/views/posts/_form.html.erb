@@ -11,6 +11,13 @@
           <%= f.text_field :title, class: 'form-control' %>
         </div>
 
+        <% if current_user.admin? %>
+          <div class="col-md-12">
+            <%= f.label :region_id %>
+            <%= f.collection_select :region_id, Region.order(:name), :id, :name, { prompt: "Выбрать..." }, class:"form-select" %>
+          </div>
+        <% end %>
+
         <div class="col-12">
           <%= f.label :body, class: 'form-label' %> *
           <%= f.text_area :body, rows: 6, class: 'form-control' %>

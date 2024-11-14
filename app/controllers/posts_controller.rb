@@ -1,10 +1,14 @@
 class PostsController < ApplicationController
+  # before_action :authorize_post!, except: %i[show update]
+  before_action :set_post, only: %i[show update destroy]
+
+  # after_action  :verify_authorized, except: %i[show update]
+
   def index
     @posts = Post.all
   end
 
   def show
-    @post = Post.with_attached_files.find(params[:id])
   end
 
   def new
@@ -12,11 +16,17 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = current_user.posts.build(post_params.merge(region_id: current_user.region_id))
+    if current_user.admin?
+      region_id = post_params[:region_id].presence || current_user.region_id
+    else
+      region_id = current_user.region_id
+    end
+
+    @post = current_user.posts.build(post_params.merge(region_id: region_id))
 
     if @post.save
-      flash[:success] = "Объявление добавлено и ожидает проверки. После активации вам на почту придёт письмо"
-      redirect_to @post
+      flash[:success] = "Пост добавлен в черновики. Для публикации отправьте его на модерацию"
+      redirect_to @post.user
     else
       respond_to do |format|
         format.html { render 'new', status: :unprocessable_entity }
@@ -36,15 +46,30 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post = Post.find(params[:id])
-    @post.update(post_params)
-    redirect_to posts_path
+    if state_action_exist?(params[:state_action])
+      @post.change_state(params[:state_action])
+
+      respond_to do |format|
+        format.html { redirect_back fallback_location: root_path }
+        format.turbo_stream do
+          render turbo_stream:
+                   turbo_stream.replace(@post, partial: 'posts/post', locals: { post: @post })
+        end
+      end
+    else
+      redirect_to root_path, flash: { error: 'Неправильное действие' }
+    end
   end
 
   def destroy
-    @post = Post.find(params[:id])
     @post.destroy
-    redirect_to posts_path
+
+    respond_to do |format|
+      format.html { redirect_to @post.user, notice: 'Пост удалён' }
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.remove("post_#{@post.id}")
+      end
+    end
   end
 
   private
@@ -52,4 +77,27 @@ class PostsController < ApplicationController
   def post_params
     params.require(:post).permit(:title, :body, :region_id, files: [])
   end
+
+  def set_post
+    @post = Post.with_attached_files.find(params[:id])
+  end
+
+  def state_action_exist?(state_action)
+    # Post::STATE_ACTIONS.key?(state_action)
+    Post::STATE_ACTIONS.include?(state_action)
+  end
+
+  def authorized_action(state_action)
+    state_action.to_sym
+  end
+
+  def pundit_user
+    current_user
+  end
+
+  def authorize_post!
+    authorize(@post || Post)
+  end
+
+
 end

@@ -7,14 +7,13 @@ class Post < ApplicationRecord
   has_many_attached :files
 
   validates :title, :body, presence: true
-  validate :user_can_post_to_region
+  # validate :user_can_post_to_region
 
   private
 
   def user_can_post_to_region
-    return if user.admin?
-    return if user.region_id == region_id
+    return if user.region_id == region_id || user.admin?
 
-    errors.add(:region, "You can only post to your region")
+    errors.add(:region, "У поста должен быть Ваш регион")
   end
 end

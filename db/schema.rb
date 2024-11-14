@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_13_205313) do
     t.bigint "region_id", null: false
     t.string "title"
     t.text "body"
-    t.integer "stage", default: 0
+    t.integer "state", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["region_id"], name: "index_posts_on_region_id"
