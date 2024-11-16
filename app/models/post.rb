@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :region
 
-  before_validation :set_default_region, if: -> { region_id.nil? }
+  before_validation :set_default_region, if: -> { user.admin? && region_id.nil? }
   before_create :set_approved_state, if: -> { user.admin? }
 
   has_many_attached :files
@@ -44,7 +44,7 @@ class Post < ApplicationRecord
   end
 
   def set_default_region
-    self.region = Region.first if user.admin?
+    self.region = Region.first
   end
 
   def set_approved_state

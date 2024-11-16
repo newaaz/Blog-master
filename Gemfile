@@ -54,6 +54,8 @@ gem "bootsnap", require: false
 gem "aasm", "~> 5.5"
 gem "devise", "~> 4.9"
 gem "pundit", "~> 2.3"
+gem "sidekiq", "~> 7.3"
+gem "redis", "~> 5.3"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -70,4 +72,5 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4', require: false
 end
+
 

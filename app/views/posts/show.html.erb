@@ -7,3 +7,25 @@
     <p><%= @post.body %></p>
   </div>
 </div>
+
+<% if @images.any? %>
+  <h3>Изображения</h3>
+  <div class="row">
+    <% @images.each do |image| %>
+      <div class="col-md-3">
+        <%= image_tag image, class: 'img-fluid' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<hr>
+
+<% if @files.any? %>
+  <h3>Файлы</h3>
+  <ul>
+    <% @files.each do |file| %>
+      <li><%= link_to file.filename, url_for(file), target: '_blank' %> (<%= file.byte_size %> bytes)</li>
+    <% end %>
+  </ul>
+<% end %>

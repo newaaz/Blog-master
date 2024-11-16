@@ -9,6 +9,15 @@ class PostsController < ApplicationController
   end
 
   def show
+    @images = []
+    @files = []
+    @post.files.each do |file|
+      if file.image?
+        @images << file
+      else
+        @files << file
+      end
+    end
   end
 
   def new
