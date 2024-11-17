@@ -12,28 +12,35 @@ class Post < ApplicationRecord
   scope :under_review, -> { where(state: 'under_review') }
   scope :published,    -> { where(state: 'approved') }
 
-  # Дополнительные полезные скоупы
-  scope :by_region, ->(region_id) { where(region_id: region_id) }
-  scope :by_user,   ->(user_id) { where(user_id: user_id) }
-
-  # Скоуп для отображения черновиков пользователя
-  scope :user_drafts, ->(user_id) { where(user_id: user_id, status: :draft) }
-
-  # Комбинированный скоуп для отображения всех постов доступных пользователю
-  # (опубликованные в его регионе + его черновики)
-  scope :available_for_user, ->(user) {
-    left_outer_joins(:region)
-      .where(
-        'posts.status = ? AND posts.region_id = ? OR (posts.user_id = ? AND posts.status = ?)',
-        statuses[:accepted],
-        user.region_id,
-        user.id,
-        statuses[:draft]
-      )
-  }
-
   validates :title, :body, presence: true
   validate :user_can_post_to_region
+
+  def self.find_by_filters(filters)
+    conditions = ['state = ?']
+    values = [Post.states[:approved]]
+
+    if filters[:region_id].present?
+      conditions << 'region_id = ?'
+      values << filters[:region_id]
+    end
+
+    if filters[:user_id].present?
+      conditions << 'user_id = ?'
+      values << filters[:user_id]
+    end
+
+    if filters[:start_date].present? && filters[:end_date].present?
+      start_of_day = Date.parse(filters[:start_date]).beginning_of_day
+      end_of_day = Date.parse(filters[:end_date]).end_of_day
+      conditions << 'created_at BETWEEN ? AND ?'
+      values << start_of_day << end_of_day
+    end
+
+    Post.with_attached_files
+        .includes(:region, :user)
+        .where(conditions.join(' AND '), *values)
+        .order(created_at: :desc)
+  end
 
   private
 

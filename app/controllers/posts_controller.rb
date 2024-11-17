@@ -1,12 +1,15 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show update destroy]
-  before_action :authorize_post!, except: %i[show update]
+  before_action :authorize_post!, except: %i[update]
 
-  after_action  :verify_authorized, except: %i[show update]
+  after_action  :verify_authorized, except: %i[update]
 
   def index
-    # @posts = Post.all
-    @posts = Post.with_attached_files.includes(:region, :user).published.order(created_at: :desc)
+    filter_params = params.permit(:region_id, :user_id, :start_date, :end_date)
+
+    check_dates if params[:start_date].present? && params[:start_date].present?
+
+    @posts = Post.find_by_filters(filter_params)
   end
 
   def show
@@ -104,5 +107,10 @@ class PostsController < ApplicationController
     authorize(@post || Post)
   end
 
-
+  def check_dates
+    if params[:start_date] > params[:end_date]
+      flash[:error] = 'Неверно указаны даты'
+      redirect_back(fallback_location: root_path)
+    end
+  end
 end

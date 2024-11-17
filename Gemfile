@@ -72,5 +72,3 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4', require: false
 end
-
-
