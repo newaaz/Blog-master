@@ -1,0 +1,8 @@
+<%= content_tag(:div, id: dom_id(post), class: "p-2 mb-2 border rounded") do %>
+
+  <span>ID  <%= post.id %> | </span>
+
+  <%= link_to post.title, post %>
+
+  Состояние: <span class="badge bg-secondary">Обработка...</span>
+<% end %>

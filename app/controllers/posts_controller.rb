@@ -71,17 +71,21 @@ class PostsController < ApplicationController
     state_action = params[:state_action]
 
     if state_action && state_action_exist?(state_action)
-      authorize(@post, "#{state_action}?")
-
-      @post.change_state(state_action)
+      PostStateChangeJob.perform_later(@post.id, state_action)
 
       respond_to do |format|
-        format.html { redirect_back fallback_location: root_path }
+        format.html {
+          redirect_back(
+            fallback_location: root_path,
+            notice: 'Запрос на изменение состояния поста отправлен'
+          )
+        }
         format.turbo_stream do
           render turbo_stream:
-                   turbo_stream.replace(@post, partial: 'posts/post', locals: { post: @post })
+                   turbo_stream.replace(@post, partial: 'posts/post_update', locals: { post: @post })
         end
       end
+
     else
       redirect_to root_path, flash: { error: 'Неправильное действие' }
     end
