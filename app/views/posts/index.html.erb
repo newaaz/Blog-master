@@ -4,3 +4,54 @@
     <p class="mb-0">Можно сортировать по региону, автору, дате</p>
   </div>
 </div>
+
+<div class="px-4 my-5 text-center">
+  <h1 class="display-6 fw-bold mb-4">Wellcome to Blog master</h1>
+
+  <div class="col-lg-7 mx-auto">
+    <%#= image_tag("vacation.jpg", class: "img-fluid rounded-top") %>
+    <div class="text-start ps-md-4 my-4 fw-semibold">
+      <p><i class="bi bi-check-circle text-primary me-2 "></i>
+        Register, or log in to apply for vacation or time off from work
+      </p>
+      <p><i class="bi bi-check-circle text-primary me-2 "></i>
+        Administrator will verify the availability of the vacation and confirm or reject the vacation request
+      </p>
+      <p><i class="bi bi-check-circle text-primary me-2 "></i>
+        You will receive a notification letter once the status of your application has changed
+      </p>
+      <p><i class="bi bi-check-circle text-primary me-2 "></i>
+        Go on vacation, relax and have a great time!
+      </p>
+    </div>
+
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <%= link_to "Log in", new_user_session_path, class: 'btn btn-primary btn-lg px-4 gap-3' %>
+      <%= link_to "Sign up", new_user_registration_path, class: 'btn btn-outline-primary btn-lg px-4' %>
+    </div>
+  </div>
+</div>
+
+<%= form_with url: posts_path, method: :get, local: true do |form| %>
+  <div>
+    <%= form.label :region_id, 'Регион' %>
+    <%= form.collection_select :region_id, Region.all, :id, :name, { include_blank: 'Все регионы' } %>
+  </div>
+  <div>
+    <%= form.label :user_id, 'Автор' %>
+    <%= form.collection_select :user_id, User.all, :id, :fio, { include_blank: 'Все авторы' } %>
+  </div>
+  <div>
+    <%= form.label :start_date, 'Дата начала' %>
+    <%= form.date_field :start_date %>
+  </div>
+  <div>
+    <%= form.label :end_date, 'Дата окончания' %>
+    <%= form.date_field :end_date %>
+  </div>
+  <div>
+    <%= form.submit 'Фильтр' %>
+  </div>
+<% end %>
+
+<%= render partial: 'posts/post_index', collection: @posts, as: :post %>

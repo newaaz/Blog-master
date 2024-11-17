@@ -1,6 +1,6 @@
 class PostPolicy < ApplicationPolicy
   def index?
-    user&.admin?
+    true
   end
 
   def show?

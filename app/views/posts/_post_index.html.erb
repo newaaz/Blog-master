@@ -1,0 +1,11 @@
+<%= content_tag(:div, id: dom_id(post), class: "p-2 mb-2 border rounded") do %>
+  <%= link_to post.title, post %>
+
+  <p><%= post.body.truncate(20) %></p>
+
+  <p><%= post.user.fio %></p>
+
+  <p><%= post.region.name %></p>
+
+  <p><%= post.files.count %></p>
+<% end %>

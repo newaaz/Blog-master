@@ -10,7 +10,7 @@ class Post < ApplicationRecord
   has_many_attached :files
 
   scope :under_review, -> { where(state: 'under_review') }
-  scope :published,    -> { where(state: 'accepted') }
+  scope :published,    -> { where(state: 'approved') }
 
   # Дополнительные полезные скоупы
   scope :by_region, ->(region_id) { where(region_id: region_id) }

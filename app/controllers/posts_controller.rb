@@ -5,7 +5,8 @@ class PostsController < ApplicationController
   after_action  :verify_authorized, except: %i[show update]
 
   def index
-    @posts = Post.all
+    # @posts = Post.all
+    @posts = Post.with_attached_files.includes(:region, :user).published.order(created_at: :desc)
   end
 
   def show
