@@ -72,3 +72,10 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rbenv', '~> 2.1', '>= 2.1.4', require: false
 end
+
+gem "roo-xls", "~> 1.2"
+
+gem "roo", "~> 2.10"
+
+
+gem "spreadsheet", "~> 1.3"

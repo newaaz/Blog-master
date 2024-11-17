@@ -1,3 +1,5 @@
+# require 'roo-xls'
+
 class PostsController < ApplicationController
   before_action :set_post, only: %i[show update destroy]
   before_action :authorize_post!, except: %i[update]
@@ -10,6 +12,17 @@ class PostsController < ApplicationController
     check_dates if params[:start_date].present? && params[:start_date].present?
 
     @posts = Post.find_by_filters(filter_params)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream do
+        render partial: 'posts/post_index', collection: @posts, as: :post
+      end
+      format.xlsx do
+        xlsx_data = PostExcelExportService.new(@posts).export_to_excel
+        send_data xlsx_data, filename: "posts-#{Date.today}-#{rand(100)}.xlsx"
+      end
+    end
   end
 
   def show

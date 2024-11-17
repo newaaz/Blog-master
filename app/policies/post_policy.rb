@@ -15,6 +15,10 @@ class PostPolicy < ApplicationPolicy
     record.user == user && record.draft?
   end
 
+  def report?
+    user&.admin?
+  end
+
   def submit_to_review?
     !!user && record.draft?
   end
