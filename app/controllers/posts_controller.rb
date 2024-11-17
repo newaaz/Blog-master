@@ -51,7 +51,7 @@ class PostsController < ApplicationController
     @post = current_user.posts.build(post_params.merge(region_id: region_id))
 
     if @post.save
-      flash[:success] = "Пост добавлен в черновики. Для публикации отправьте его на модерацию"
+      flash[:success] = "Пост добавлен в черновики. Для публикации отправьте его на модерацию" if current_user.admin?
       redirect_to @post.user
     else
       respond_to do |format|

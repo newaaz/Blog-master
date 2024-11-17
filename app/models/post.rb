@@ -5,7 +5,7 @@ class Post < ApplicationRecord
   belongs_to :region
 
   before_validation :set_default_region, if: -> { user.admin? && region_id.nil? }
-  before_create :set_approved_state, if: -> { user.admin? }
+  before_create :set_published, if: -> { user.admin? }
 
   has_many_attached :files
 
@@ -54,7 +54,8 @@ class Post < ApplicationRecord
     self.region = Region.first
   end
 
-  def set_approved_state
+  def set_published
     self.state = :approved
+    self.published_at = Time.current
   end
 end

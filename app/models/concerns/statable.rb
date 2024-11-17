@@ -22,7 +22,9 @@ module Statable
       end
 
       event :approve do
+        before { self.published_at = Time.current}
         transitions from: :under_review, to: :approved
+        # after { self.update(published_at: Time.current)}
       end
 
       event :reject do
