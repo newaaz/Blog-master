@@ -16,6 +16,19 @@ set :ssh_options, {
   verify_host_key: :never
 }
 
+# namespace :deploy do
+#   desc 'Fix permissions'
+#   task :fix_permissions do
+#     on roles(:app) do
+#       execute :sudo, :chown, '-R', "#{fetch(:user)}:#{fetch(:user)}", fetch(:deploy_to)
+#       execute :sudo, :chmod, '-R', '755', fetch(:deploy_to)
+#       execute "chmod -R 775 #{shared_path}/log #{shared_path}/tmp #{current_path}/log #{current_path}/tmp"
+#     end
+#   end
+#
+#   after :publishing, :fix_permissions
+# end
+
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
 
