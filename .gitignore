@@ -37,3 +37,6 @@
 
 # Ignore config/database.yml
 /config/database.yml
+
+.idea
+.kamal

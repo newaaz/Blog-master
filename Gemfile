@@ -58,11 +58,6 @@ gem "sidekiq", "~> 7.3"
 gem "redis", "~> 5.3"
 gem "spreadsheet", "~> 1.3"
 
-group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
-end
-
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
@@ -72,4 +67,24 @@ group :development do
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-rbenv', '~> 2.2', require: false
   gem 'capistrano-passenger', '~> 0.2.0', require: false
+end
+
+group :development, :test do
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  # gem "better_errors", "~> 2.10"
+  gem "factory_bot_rails", "~> 6.2"
+  gem "rspec-rails", "~> 6.0"
+end
+
+group :test do
+  gem "capybara"
+  gem "webdriver", "~> 0.19.0"
+  # gem "database_cleaner-active_record", "~> 2.0"
+  gem "launchy", "~> 2.5"
+  gem 'pundit-matchers', '~> 1.8.4'
+  gem "selenium-webdriver", "~> 4.14"
+  gem "shoulda-matchers", "~> 5.2"
+  gem "rails-controller-testing", "~> 1.0"
+  # gem 'simplecov', require: false
 end

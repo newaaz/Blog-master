@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   belongs_to :user
   belongs_to :region
 
-  before_validation :set_default_region, if: -> { user.admin? && region_id.nil? }
+  before_validation :set_default_region, if: -> { user&.admin? && region_id.nil? }
   before_create :set_published, if: -> { user.admin? }
 
   has_many_attached :files
@@ -13,7 +13,6 @@ class Post < ApplicationRecord
   scope :published,    -> { where(state: 'approved') }
 
   validates :title, :body, presence: true
-  validate :user_can_post_to_region
 
   def self.find_by_filters(filters)
     conditions = ['state = ?']
@@ -43,12 +42,6 @@ class Post < ApplicationRecord
   end
 
   private
-
-  def user_can_post_to_region
-    return if user.region_id == region_id || user.admin?
-
-    errors.add(:region, "У поста должен быть Ваш регион")
-  end
 
   def set_default_region
     self.region = Region.first
