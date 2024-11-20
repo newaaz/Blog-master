@@ -9,7 +9,7 @@ class PostsController < ApplicationController
   def index
     filter_params = params.permit(:region_id, :user_id, :start_date, :end_date)
 
-    check_dates if params[:start_date].present? && params[:start_date].present?
+    check_dates if filter_params[:start_date].present? || filter_params[:end_date].present?
 
     @posts = Post.find_by_filters(filter_params)
 
@@ -42,11 +42,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    if current_user.admin?
-      region_id = post_params[:region_id].presence || current_user.region_id
-    else
-      region_id = current_user.region_id
-    end
+    region_id = set_region_id
 
     @post = current_user.posts.build(post_params.merge(region_id: region_id))
 
@@ -125,9 +121,20 @@ class PostsController < ApplicationController
   end
 
   def check_dates
-    if params[:start_date] > params[:end_date]
+    if params[:start_date].present? != params[:end_date].present?
+      flash[:error] = 'Необходимо указать обе даты'
+      redirect_back(fallback_location: root_path)
+    elsif params[:start_date].present? && params[:end_date].present? && params[:start_date] > params[:end_date]
       flash[:error] = 'Неверно указаны даты'
       redirect_back(fallback_location: root_path)
+    end
+  end
+
+  def set_region_id
+    if current_user.admin?
+      post_params[:region_id].presence || current_user.region_id
+    else
+      current_user.region_id
     end
   end
 end

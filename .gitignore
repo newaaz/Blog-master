@@ -38,5 +38,5 @@
 # Ignore config/database.yml
 /config/database.yml
 
-.idea
+.idea/*
 .kamal
