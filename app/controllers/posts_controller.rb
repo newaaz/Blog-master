@@ -1,6 +1,7 @@
-# require 'roo-xls'
-
 class PostsController < ApplicationController
+  include DatesChecked
+
+  # before_action :authenticate_user!, except: %i[index show]
   before_action :set_post, only: %i[show update destroy]
   before_action :authorize_post!, except: %i[update]
 
@@ -10,28 +11,7 @@ class PostsController < ApplicationController
     filter_params = params.permit(:region_id, :user_id, :start_date, :end_date)
 
     if filter_params[:start_date].present? || filter_params[:end_date].present?
-      unless check_dates
-        respond_to do |format|
-          format.html do
-            # Для HTML запроса
-            flash.now[:alert] = dates_error_message
-            @posts = Post.none # или текущие посты
-            render :index
-          end
-          format.turbo_stream do
-            render turbo_stream: [
-              turbo_stream.update('forms_errors',
-                                  render_to_string(partial: 'shared/error_messages',
-                                                   locals: { message: dates_error_message })),
-              turbo_stream.update('posts',
-                                  render_to_string(partial: 'posts/post_index',
-                                                   collection: Post.none,
-                                                   as: :post))
-            ]
-          end
-        end
-        return
-      end
+      respond_date_error and return unless dates_valid?
     end
 
     @posts = Post.find_by_filters(filter_params)
@@ -39,16 +19,18 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html
       format.turbo_stream do
-        render turbo_stream: turbo_stream.update(
-          'posts',
-          render_to_string(partial: 'posts/post_index',
-                           collection: @posts,
-                           as: :post)
-        )
+        render turbo_stream: [
+          turbo_stream.update('posts',
+                              render_to_string(partial: 'posts/post_index',
+                                               collection: @posts,
+                                               as: :post)),
+          turbo_stream.update('forms_errors',
+                              render_to_string(partial: 'shared/error_messages',
+                                               locals: { message: nil }))
+        ]
       end
       format.xlsx do
-        xlsx_data = PostExcelExportService.new(@posts).export_to_excel
-        send_data xlsx_data, filename: "posts-#{Date.today}-#{rand(100)}.xlsx"
+        send_excel
       end
     end
   end
@@ -148,18 +130,9 @@ class PostsController < ApplicationController
     authorize(@post || Post)
   end
 
-  def check_dates
-    @dates_error_message = if params[:start_date].present? != params[:end_date].present?
-                       'Необходимо указать обе даты'
-                     elsif params[:start_date] > params[:end_date]
-                       'Неверно указаны даты'
-                     end
-
-    @dates_error_message.nil?
-  end
-
-  def dates_error_message
-    @dates_error_message
+  def send_excel
+    xlsx_data = PostExcelExportService.new(@posts).export_to_excel
+    send_data xlsx_data, filename: "posts-#{Date.today}-#{rand(100)}.xlsx"
   end
 
   def set_region_id
