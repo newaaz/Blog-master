@@ -77,6 +77,8 @@ class PostsController < ApplicationController
     state_action = params[:state_action]
 
     if state_action && state_action_exist?(state_action)
+      authorize(@post, "#{state_action}?")
+
       PostStateChangeJob.perform_later(@post.id, state_action)
 
       respond_to do |format|

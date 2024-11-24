@@ -146,17 +146,125 @@ RSpec.describe PostsController, type: :controller do
     end
   end
 
-  # describe 'PATCH #update' do
-  #   context 'Unauthenticated user change state post' do
-  #     let(:post) { create(:post, user: user) }
-  #
-  #     it 'does not change post state' do
-  #       patch :update, params: { id: post, post: { state: Post::APPROVED } }
-  #       post.reload
-  #       expect(post.state).to eq Post::DRAFT
-  #     end
-  #   end
-  # end
+  describe 'PATCH #update' do
+    let(:author) { create(:user, region: region) }
+    let(:post)   { create(:post, user: author) }
+
+    before { ActiveJob::Base.queue_adapter = :test }
+
+    context 'change state from draft' do
+      let(:state_action) { 'submit_to_review' }
+
+      context 'authenticated author' do
+        before { login(author) }
+
+        it 'enqueues PostStateChangeJob with correct arguments' do
+          expect {
+            patch :update, params: { id: post.id, state_action: state_action }
+          }.to have_enqueued_job(PostStateChangeJob)
+                 .with(post.id, state_action)
+                 .on_queue('default')
+        end
+      end
+
+      context 'authenticated user non-author' do
+        before { login(user) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'authenticated user-admin changes state from draft' do
+        before { login(admin) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'Unauthenticated user change state post' do
+        it_behaves_like 'State authorized'
+      end
+    end
+
+    context 'change state to approve from under_review' do
+      let(:state_action) { 'approve' }
+
+      context 'authenticated user-admin changes state to approved from under_review' do
+        before { login(admin) }
+
+        before { post.update(state: Post::UNDER_REVIEW)}
+
+        it 'enqueues PostStateChangeJob with correct arguments' do
+          expect {
+            patch :update, params: { id: post.id, state_action: state_action }
+          }.to have_enqueued_job(PostStateChangeJob)
+                 .with(post.id, state_action)
+                 .on_queue('default')
+        end
+      end
+
+      context 'authenticated user-admin changes state to approved from draft' do
+        before { login(admin) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'authenticated author' do
+        before { login(author) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'authenticated user non-author' do
+        before { login(user) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'Unauthenticated user change state post' do
+        it_behaves_like 'State authorized'
+      end
+
+    end
+
+    context 'change state to approve from under_review' do
+      let(:state_action) { 'reject' }
+
+      context 'authenticated user-admin changes state to approved from under_review' do
+        before { login(admin) }
+
+        before { post.update(state: Post::UNDER_REVIEW)}
+
+        it 'enqueues PostStateChangeJob with correct arguments' do
+          expect {
+            patch :update, params: { id: post.id, state_action: state_action }
+          }.to have_enqueued_job(PostStateChangeJob)
+                 .with(post.id, state_action)
+                 .on_queue('default')
+        end
+      end
+
+      context 'authenticated user-admin changes state to approved from draft' do
+        before { login(admin) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'authenticated author' do
+        before { login(author) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'authenticated user non-author' do
+        before { login(user) }
+
+        it_behaves_like 'State authorized'
+      end
+
+      context 'Unauthenticated user change state post' do
+        it_behaves_like 'State authorized'
+      end
+    end
+  end
 
   # describe 'GET #index' do
   # end
