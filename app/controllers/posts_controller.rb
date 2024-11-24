@@ -9,14 +9,42 @@ class PostsController < ApplicationController
   def index
     filter_params = params.permit(:region_id, :user_id, :start_date, :end_date)
 
-    check_dates if filter_params[:start_date].present? || filter_params[:end_date].present?
+    if filter_params[:start_date].present? || filter_params[:end_date].present?
+      unless check_dates
+        respond_to do |format|
+          format.html do
+            # Для HTML запроса
+            flash.now[:alert] = dates_error_message
+            @posts = Post.none # или текущие посты
+            render :index
+          end
+          format.turbo_stream do
+            render turbo_stream: [
+              turbo_stream.update('forms_errors',
+                                  render_to_string(partial: 'shared/error_messages',
+                                                   locals: { message: dates_error_message })),
+              turbo_stream.update('posts',
+                                  render_to_string(partial: 'posts/post_index',
+                                                   collection: Post.none,
+                                                   as: :post))
+            ]
+          end
+        end
+        return
+      end
+    end
 
     @posts = Post.find_by_filters(filter_params)
 
     respond_to do |format|
       format.html
       format.turbo_stream do
-        render partial: 'posts/post_index', collection: @posts, as: :post
+        render turbo_stream: turbo_stream.update(
+          'posts',
+          render_to_string(partial: 'posts/post_index',
+                           collection: @posts,
+                           as: :post)
+        )
       end
       format.xlsx do
         xlsx_data = PostExcelExportService.new(@posts).export_to_excel
@@ -121,13 +149,17 @@ class PostsController < ApplicationController
   end
 
   def check_dates
-    if params[:start_date].present? != params[:end_date].present?
-      flash[:error] = 'Необходимо указать обе даты'
-      redirect_back(fallback_location: root_path)
-    elsif params[:start_date].present? && params[:end_date].present? && params[:start_date] > params[:end_date]
-      flash[:error] = 'Неверно указаны даты'
-      redirect_back(fallback_location: root_path)
-    end
+    @dates_error_message = if params[:start_date].present? != params[:end_date].present?
+                       'Необходимо указать обе даты'
+                     elsif params[:start_date] > params[:end_date]
+                       'Неверно указаны даты'
+                     end
+
+    @dates_error_message.nil?
+  end
+
+  def dates_error_message
+    @dates_error_message
   end
 
   def set_region_id

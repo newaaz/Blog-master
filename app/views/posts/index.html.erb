@@ -5,7 +5,9 @@
   </div>
 </div>
 
-<%= form_with url: posts_path, method: :get, local: true, data: { turbo_frame: 'posts' }, id: 'filter-form' do |form| %>
+<%= form_with url: posts_path, method: :get, local: true, data: { turbo_frame: 'posts', turbo_stream: true }, id: 'filter-form' do |form| %>
+  <div id="forms_errors"></div>
+
   <div class="border rounded p-3 my-3 shadow">
     <div>
       <%= form.label :region_id, 'Регион', class: "form-label" %>
@@ -39,8 +41,4 @@
 <%= turbo_frame_tag :posts do %>
   <%= render partial: 'posts/post_index', collection: @posts, as: :post %>
 <% end %>
-
-
-
-
 
