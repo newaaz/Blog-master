@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
+    sequence(:login) { |n| "user_#{n}" }
     association :region
-    login    { 'login' }
     fio      { 'Test Employee FIO' }
     password { 'user' }
     admin    { false }
