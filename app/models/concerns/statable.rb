@@ -4,6 +4,11 @@ module Statable
   included do
     STATE_ACTIONS = %w[submit_to_review approve reject]
 
+    DRAFT = 'draft'
+    UNDER_REVIEW = 'under_review'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+
     include AASM
 
     enum state: { draft: 0, under_review: 1, approved: 2, rejected: 3 }
@@ -16,15 +21,11 @@ module Statable
 
       event :submit_to_review do
         transitions from: :draft, to: :under_review
-        # after do
-        #   PostStateChangeJob.perform_later(self)
-        # end
       end
 
       event :approve do
         before { self.published_at = Time.current}
         transitions from: :under_review, to: :approved
-        # after { self.update(published_at: Time.current)}
       end
 
       event :reject do

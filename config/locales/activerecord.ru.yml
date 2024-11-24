@@ -1,0 +1,35 @@
+ru:
+  activerecord:
+    models:
+      federal_district: 'Федеральный округ'
+      region: 'Регион'
+      user: 'Пользователь'
+      post: 'Пост'
+    attributes:
+      federal_district:
+        name: 'Название'
+      region:
+        name: 'Название'
+        federal_district: 'Федеральный округ'
+      user:
+        login: 'Логин'
+        password: 'Пароль'
+        password_confirmation: 'Подтверждение пароля'
+        fio: 'Имя'
+        region: 'Регион'
+      post:
+        title: 'Заголовок'
+        body: 'Текст'
+        user: 'Автор'
+        region: 'Регион'
+
+    errors:
+      messages:
+        record_invalid: 'Неверные данные'
+        blank: 'не может быть пустым'
+        too_short: 'слишком короткий'
+        invalid: 'не корректен'
+        confirmation: 'не соответствует паролю'
+        taken: 'уже зарегистрирован'
+        required: 'требуется'
+        too_long: 'слишком длинное'

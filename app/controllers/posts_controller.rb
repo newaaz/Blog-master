@@ -3,9 +3,9 @@ class PostsController < ApplicationController
 
   # before_action :authenticate_user!, except: %i[index show]
   before_action :set_post, only: %i[show update destroy]
-  before_action :authorize_post!, except: %i[update]
+  before_action :authorize_post!
 
-  after_action  :verify_authorized, except: %i[update]
+  after_action  :verify_authorized
 
   def index
     filter_params = params.permit(:region_id, :user_id, :start_date, :end_date)

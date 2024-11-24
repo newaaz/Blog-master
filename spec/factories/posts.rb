@@ -1,9 +1,12 @@
 FactoryBot.define do
   factory :post do
-    association :user
-    association :region
     title  { 'post_title' }
-    body   { 'post_title' }
+    body   { 'post_body' }
+    association :user
+
+    after(:build) do |post|
+      post.region ||= post.user.region
+    end
   end
 end
 

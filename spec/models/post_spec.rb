@@ -25,7 +25,7 @@ RSpec.describe Post, type: :model do
       post.valid?
 
       expect(post.errors.count).to eq 1
-      expect(post.errors.first.full_message).to include("User не может отсутствовать")
+      expect(post.errors.first.full_message).to include("Автор требуется")
     end
 
     it 'is belong to region' do
@@ -33,7 +33,7 @@ RSpec.describe Post, type: :model do
       post.valid?
 
       expect(post.errors.count).to eq 1
-      expect(post.errors.first.full_message).to include("Region не может отсутствовать")
+      expect(post.errors.first.full_message).to include("Регион требуется")
     end
 
   end

@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe UsersController, type: :controller do
   let(:admin) { create(:user, admin: true, region: nil) }
   let(:user)  { create(:user) }
-  let(:posts) { create_list(:post, 3, user:) }
 
   describe 'GET #show' do
     context 'when authenticated user' do

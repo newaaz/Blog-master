@@ -4,28 +4,38 @@ class PostPolicy < ApplicationPolicy
   end
 
   def show?
-    true
+    record.approved? || author? || admin?
   end
 
   def create?
     !!user
   end
 
-  def destroy?
-    record.user == user && record.draft?
+  def update?
+    author? || admin?
   end
 
-  def report?
-    user&.admin?
+  def destroy?
+    author? && record.draft?
   end
 
   def submit_to_review?
-    !!user && record.draft?
+    author? && record.draft?
   end
 
   def approve?
-    user&.admin? && record.under_review?
+    admin? && record.under_review?
   end
 
   alias_method :reject?, :approve?
+
+  private
+
+  def author?
+    user&.id == record.user_id
+  end
+
+  def admin?
+    user&.admin?
+  end
 end
