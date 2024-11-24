@@ -31,7 +31,7 @@ class Post < ApplicationRecord
     if filters[:start_date].present? && filters[:end_date].present?
       start_of_day = Date.parse(filters[:start_date]).beginning_of_day
       end_of_day = Date.parse(filters[:end_date]).end_of_day
-      conditions << 'created_at BETWEEN ? AND ?'
+      conditions << 'published_at BETWEEN ? AND ?'
       values << start_of_day << end_of_day
     end
 

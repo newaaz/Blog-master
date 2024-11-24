@@ -1,14 +1,28 @@
 <div class="row">
   <div class="col-12 text-center">
-    <h1 class="fs-2 mb-2">Все посты</h1>
-    <p class="mb-0">Можно сортировать по региону, автору, дате</p>
+    <h1 class="fs-2 mb-2">Добро пожаловать в ПостМастер</h1>
+  </div>
+</div>
+
+<div class="col-lg-7 mx-auto">
+  <div class="text-start ps-md-4 my-4 fw-semibold">
+    <p><i class="bi bi-check-circle text-primary me-2 "></i>
+      Можно отсортировать, изучить результаты и скачать их
+    </p>
+    <p><i class="bi bi-check-circle text-primary me-2 "></i>
+      Вход под админом admin:admin
+    </p>
+    <p><i class="bi bi-circle text-primary me-2 "></i>
+      Осталось написать приёмочные тесты
+    </p>
   </div>
 </div>
 
 <%= form_with url: posts_path, method: :get, local: true, data: { turbo_frame: 'posts', turbo_stream: true }, id: 'filter-form' do |form| %>
-  <div id="forms_errors"></div>
 
-  <div class="border rounded p-3 my-3 shadow">
+  <div class="border rounded p-3 my-3 shadow col-lg-7">
+    <div id="forms_errors"></div>
+
     <div>
       <%= form.label :region_id, 'Регион', class: "form-label" %>
       <%= form.collection_select :region_id, Region.all, :id, :name, { include_blank: 'Все регионы' }, class: "form-select" %>
@@ -41,4 +55,3 @@
 <%= turbo_frame_tag :posts do %>
   <%= render partial: 'posts/post_index', collection: @posts, as: :post %>
 <% end %>
-
