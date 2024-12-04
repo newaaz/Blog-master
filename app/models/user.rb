@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :rememberable
+  devise :database_authenticatable, :registerable, :rememberable, :validatable
 
   has_many :posts, dependent: :destroy
   belongs_to :region, optional: true
@@ -13,6 +13,10 @@ class User < ApplicationRecord
   end
 
   def email_changed?
+    false
+  end
+
+  def will_save_change_to_email?
     false
   end
 end

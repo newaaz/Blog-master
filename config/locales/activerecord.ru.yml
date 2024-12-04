@@ -17,6 +17,7 @@ ru:
         password_confirmation: 'Подтверждение пароля'
         fio: 'Имя'
         region: 'Регион'
+        region_id: 'Регион'
       post:
         title: 'Заголовок'
         body: 'Текст'
