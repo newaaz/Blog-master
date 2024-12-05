@@ -23,6 +23,7 @@ ru:
         body: 'Текст'
         user: 'Автор'
         region: 'Регион'
+        files: 'Файлы и изображения'
 
     errors:
       messages:
