@@ -12,9 +12,9 @@ json_data['data'].each do |district|
   federal_district.regions.create!(district['areas'].map { |area| { name: area['name'] } })
 end
 
-User.create!(login: 'admin', password: 'admin', admin: true, fio: 'Admin Adminovich')
+User.create!(login: 'admin', password: 'admin123', admin: true, fio: 'Admin Adminovich')
 
-user = User.create!(login: 'user', password: 'user', region: Region.all.sample, admin: false, fio: 'Антонов Александр')
+user = User.create!(login: 'user', password: 'user123', region: Region.all.sample, admin: false, fio: 'Антонов Александр')
 
 20.times do |i|
   state = i < 5 ? :draft : :approved
