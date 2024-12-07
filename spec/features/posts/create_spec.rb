@@ -69,28 +69,6 @@ feature 'User can create post', %q{
       expect(page).to have_css("img[src*='map.png']")
       expect(page).to have_link 'test_file.txt'
     end
-
-    # scenario 'with invalid file type' do
-    #   fill_in 'Заголовок', with: 'Test title'
-    #   fill_in 'Текст', with: 'Test body'
-    #
-    #   attach_file 'post[files][]', "#{Rails.root}/app/assets/files/invalid.exe"
-    #
-    #   click_button 'Добавить пост'
-    #
-    #   expect(page).to have_content 'Неправильный формат файла'
-    # end
-    #
-    # scenario 'with too large file' do
-    #   fill_in 'Заголовок', with: 'Test title'
-    #   fill_in 'Текст', with: 'Test body'
-    #
-    #   attach_file 'post[files][]', "#{Rails.root}/app/assets/files/large_file.jpg"
-    #
-    #   click_button 'Добавить пост'
-    #
-    #   expect(page).to have_content 'Размер файла превышает допустимый'
-    # end
   end
 
   describe 'Admin' do
@@ -114,7 +92,7 @@ feature 'User can create post', %q{
         expect(page).to have_content 'approved'
       end
 
-      expect(page).to have_content 'Пост добавлен в черновики. Для публикации отправьте его на модерацию'
+      expect(page).to have_content 'Пост создан'
       expect(Post.last.region).to eq region
     end
 

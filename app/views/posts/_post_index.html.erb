@@ -1,4 +1,4 @@
-<%= content_tag(:div, id: dom_id(post), class: "p-2 mb-2 border rounded") do %>
+<%= content_tag(:div, id: dom_id(post), class: "post p-2 mb-2 border rounded") do %>
   <%= link_to post.title, post, data: { turbo_frame: "_top" } %>
 
   <p><%= post.body.truncate(150) %></p>

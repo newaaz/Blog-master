@@ -12,8 +12,7 @@ feature 'User can send post to moderation Admin can accept or reject vacation re
   given!(:draft_post)    { create(:post, user: user, region: region, state: 'draft') }
   given!(:approved_post) { create(:post, user: user, region: region, state: 'approved') }
 
-  # scenario 'User can send post on moderation Admin can accept or reject vacation requests', js: true do
-  scenario 'User can send post on moderation Admin can accept or reject vacation requests', js: true do
+  scenario 'User can send post to moderation, Admin can accept or reject vacation requests', js: true do
     Capybara.using_session('user') do
       sign_in(user)
       within("#post_#{draft_post.id}") do
@@ -36,7 +35,7 @@ feature 'User can send post to moderation Admin can accept or reject vacation re
       visit admin_dashboard_path
 
       expect(page).to_not have_css("#post_#{approved_post.id}")
-      save_and_open_page
+
       within("#post_#{draft_post.id}") do
         expect(page).to have_content draft_post.title
         expect(page).to have_link 'Принять'
