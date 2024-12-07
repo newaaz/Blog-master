@@ -6,11 +6,11 @@ feature 'User can delete post', "
   I'd like to be able to delete my draft posts
 " do
 
-  given!(:region) { create(:region) }
-  given!(:user) { create(:user, region:) }
+  given!(:region)     { create(:region) }
+  given!(:user)       { create(:user, region:) }
   given!(:other_user) { create(:user, region:) }
   given!(:draft_post) { create(:post, user: user, state: 'draft') }
-  given!(:approved_post) { create(:post, user: user, state: 'approved') }
+  given!(:approved_post)   { create(:post, user: user, state: 'approved') }
   given!(:other_user_post) { create(:post, user: other_user, state: 'draft') }
 
   describe 'Authenticated user' do
