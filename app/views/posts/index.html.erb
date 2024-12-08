@@ -4,53 +4,55 @@
   </div>
 </div>
 
-<div class="col-lg-7 mx-auto">
-  <div class="text-start ps-md-4 my-4 fw-semibold">
-    <p><i class="bi bi-check-circle text-primary me-2 "></i>
-      Можно отсортировать, изучить результаты и скачать их
-    </p>
-    <p><i class="bi bi-check-circle text-primary me-2 "></i>
-      Вход под админом admin:admin
-    </p>
-    <p><i class="bi bi-circle text-primary me-2 "></i>
-      Осталось написать приёмочные тесты
-    </p>
+<div class="row">
+
+  <div class="col-md-6">
+    <%= form_with url: posts_path, method: :get, local: true, data: { turbo_frame: 'posts', turbo_stream: true }, id: 'filter-form' do |form| %>
+
+      <div class="border rounded p-3 my-3 shadow">
+        <div id="forms_errors"></div>
+
+        <div>
+          <%= form.label :region_id, 'Регион', class: "form-label" %>
+          <%= form.collection_select :region_id, Region.all, :id, :name, { include_blank: 'Все регионы' }, class: "form-select" %>
+        </div>
+        <div>
+          <%= form.label :user_id, 'Автор', class: "form-label" %>
+          <%= form.collection_select :user_id, User.all, :id, :fio, { include_blank: 'Все авторы' }, class: "form-select" %>
+        </div>
+
+        <div class="row my-3">
+          <div class="col-md-6">
+            <%= form.label :start_date, 'Дата начала', class: "form-label" %>
+            <%= form.date_field :start_date, class: "form-control" %>
+
+          </div>
+          <div class="col-md-6">
+            <%= form.label :end_date, 'Дата окончания', class: "form-label" %>
+            <%= form.date_field :end_date, class: "form-control" %>
+
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-start my-3">
+          <%= form.submit 'Фильтр', class: "btn btn-primary" %>
+
+          <a data-controller="report" data-action="click->report#downloadReport" href="#" class="btn btn-success">Скачать отчет</a>
+
+
+          <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Tooltip on right">
+            Tooltip on right
+          </button>
+        </div>
+      </div>
+  <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <%= image_tag("map_all.jpeg", class: "img-fluid rounded-top") %>
   </div>
 </div>
 
-<%= form_with url: posts_path, method: :get, local: true, data: { turbo_frame: 'posts', turbo_stream: true }, id: 'filter-form' do |form| %>
-
-  <div class="border rounded p-3 my-3 shadow col-lg-7">
-    <div id="forms_errors"></div>
-
-    <div>
-      <%= form.label :region_id, 'Регион', class: "form-label" %>
-      <%= form.collection_select :region_id, Region.all, :id, :name, { include_blank: 'Все регионы' }, class: "form-select" %>
-    </div>
-    <div>
-      <%= form.label :user_id, 'Автор', class: "form-label" %>
-      <%= form.collection_select :user_id, User.all, :id, :fio, { include_blank: 'Все авторы' }, class: "form-select" %>
-    </div>
-
-    <div class="row my-3">
-      <div class="col-md-6">
-        <%= form.label :start_date, 'Дата начала', class: "form-label" %>
-        <%= form.date_field :start_date, class: "form-control" %>
-
-      </div>
-      <div class="col-md-6">
-        <%= form.label :end_date, 'Дата окончания', class: "form-label" %>
-        <%= form.date_field :end_date, class: "form-control" %>
-
-      </div>
-    </div>
-
-    <div class="d-grid gap-2 d-sm-flex justify-content-sm-start my-3">
-      <%= form.submit 'Фильтр', class: "btn btn-primary" %>
-      <a data-controller="report" data-action="click->report#downloadReport" href="#" class="btn btn-success">Скачать отчет</a>
-    </div>
-  </div>
-<% end %>
 
 <%= turbo_frame_tag :posts do %>
   <%= render partial: 'posts/post_index', collection: @posts, as: :post %>

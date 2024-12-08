@@ -34,6 +34,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
+  config.include DownloadHelpers, type: :feature
 
   Capybara.javascript_driver = :selenium_chrome_headless
   Capybara.default_max_wait_time = 5
@@ -85,4 +86,42 @@ end
 
 Pundit::Matchers.configure do |config|
   config.user_alias = :employee
+end
+
+# for download tests
+# driver = if ENV['CHROME_DEBUG'] == 'true'
+#            Capybara.register_driver :chrome do |app|
+#              Capybara::Selenium::Driver.new(app, browser: :chrome)
+#            end
+#            :chrome
+#          else
+#            Capybara.register_driver :headless_chrome do |app|
+#              browser_options = ::Selenium::WebDriver::Chrome::Options.new
+#              browser_options.add_argument('headless')
+#              browser_options.add_argument('disable-gpu')
+#              browser_options.add_argument('window-size=1400,1200')
+#              browser_options.add_preference('download.default_directory', Rails.root.join('tmp/downloads'))
+#
+#              Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+#            end
+#            :headless_chrome
+#          end
+#
+# Capybara.javascript_driver = driver
+# Capybara.default_driver = driver
+# Capybara.server = :puma, { Silent: true }
+# Capybara.raise_server_errors = true
+# Capybara.server_errors << Exception
+
+
+# 2
+Capybara.register_driver :selenium_chrome_headless do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.args << '--headless'
+    opts.args << '--disable-site-isolation-trials'
+  end
+  browser_options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
+
+  browser_options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
