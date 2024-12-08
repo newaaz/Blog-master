@@ -37,19 +37,31 @@
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-start my-3">
           <%= form.submit 'Фильтр', class: "btn btn-primary" %>
 
-          <a data-controller="report" data-action="click->report#downloadReport" href="#" class="btn btn-success">Скачать отчет</a>
-
-
-          <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="Tooltip on right">
-            Tooltip on right
-          </button>
+          <a data-controller="report"
+             data-action="click->report#downloadReport"
+             data-bs-toggle="tooltip"
+             data-bs-placement="right"
+             data-bs-title="Скачайте Excel-отчёт со всеми постами или отфильтруйте их по нужным параметрам"
+             href="#"
+             class="btn btn-success">
+            Скачать отчет
+          </a>
         </div>
+
+        <p class="text-muted mb-2">
+          <i class="bi bi-download text-primary me-2 "></i>
+          <small>Выгрузите посты в Excel-файл, используя фильтры для получения нужной выборки</small>
+        </p>
       </div>
   <% end %>
   </div>
 
   <div class="col-md-6">
-    <%= image_tag("map_all.jpeg", class: "img-fluid rounded-top") %>
+    <%= image_tag("map_all_cut.jpg", class: "img-fluid rounded-top mb-3") %>
+
+    <div class="text-center py-5 py-xl-3">
+      <h4 class="text-primary">Делись историями своего края</h4>
+    </div>
   </div>
 </div>
 
