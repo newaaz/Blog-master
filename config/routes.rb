@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     get "/users/sign_out", as: "sign_out", to: "devise/sessions#destroy"
   end
 
+  mount ActionCable.server => '/cable'
+
   resources :posts
   resources :users
 

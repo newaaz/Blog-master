@@ -67,5 +67,7 @@
 
 
 <%= turbo_frame_tag :posts do %>
-  <%= render partial: 'posts/post_index', collection: @posts, as: :post %>
+  <div id="posts">
+    <%= render partial: 'posts/post_index', collection: @posts, as: :post %>
+  </div>
 <% end %>

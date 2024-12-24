@@ -30,6 +30,12 @@ feature 'User can send post to moderation Admin can accept or reject vacation re
       expect(page).to_not have_css("#post_#{draft_post.id}")
     end
 
+    Capybara.using_session('guest') do
+      visit root_path
+
+      expect(page).to_not have_css("#post_#{draft_post.id}")
+    end
+
     Capybara.using_session('admin') do
       sign_in(admin)
       visit admin_dashboard_path
@@ -52,9 +58,6 @@ feature 'User can send post to moderation Admin can accept or reject vacation re
     end
 
     Capybara.using_session('guest') do
-      visit root_path
-
-      expect(page).to have_css("#post_#{approved_post.id}")
       expect(page).to have_css("#post_#{draft_post.id}")
     end
 

@@ -1,5 +1,6 @@
 import "@hotwired/turbo-rails"
 import "./controllers"
+import "./channels"
 import * as bootstrap from "bootstrap"
 
 document.addEventListener("turbo:load", () => {
