@@ -31,7 +31,7 @@ module BlogMaster
     config.time_zone = "Moscow"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    # config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :sidekiq
 
     config.i18n.available_locales = %i[en ru]
     config.i18n.default_locale = :ru
