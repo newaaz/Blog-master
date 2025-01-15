@@ -7,7 +7,7 @@
           <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
         </svg>
 
-        <span class="text-dark">ПостМастер</span>
+        <span class="text-dark">UserMaster</span>
       <% end %>
 
       <div class="text-end">
@@ -50,8 +50,8 @@
           </div>
 
         <% else %>
-          <%= link_to "Войти", new_user_session_path, class: 'btn btn-primary btn-sm me-1' %>
-          <%= link_to "Регистрация", new_user_registration_path, class: 'btn btn-outline-primary btn-sm' %>
+          <%= link_to "Add user", new_account_path, class: 'btn btn-primary btn-sm me-1' %>
+          <%#= link_to "Регистрация", new_user_registration_path, class: 'btn btn-outline-primary btn-sm' %>
         <% end %>
       </div>
     </div>

@@ -58,6 +58,8 @@ gem "sidekiq", "~> 7.3"
 gem "redis", "~> 5.3"
 gem "spreadsheet", "~> 1.3"
 
+gem 'active_interaction', '~> 5.4'
+
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"

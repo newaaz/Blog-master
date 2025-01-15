@@ -48,6 +48,9 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_interaction (5.4.0)
+      activemodel (>= 5.2, < 9)
+      activesupport (>= 5.2, < 9)
     activejob (7.0.8.6)
       activesupport (= 7.0.8.6)
       globalid (>= 0.3.6)
@@ -328,6 +331,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm (~> 5.5)
+  active_interaction (~> 5.4)
   bootsnap
   capistrano (~> 3.17)
   capistrano-passenger (~> 0.2.0)
